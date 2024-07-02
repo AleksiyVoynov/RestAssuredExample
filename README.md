@@ -11,6 +11,4 @@
 * cd (path to /RestAssuredExample)
 * run `gradle clean`
 * run `gradle test`
-
-## To see a report:
-1. run `allure serve build/allure-results`
+* run `allure serve build/allure-results`
