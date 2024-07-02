@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+}
+
+wrapper {
+    gradleVersion = '8.7'
+}
+
+repositories {
+    mavenCentral()
+}
+
+group = 'org.example.testng'
+version = '1.0-SNAPSHOT'
+
+def allureVersion = '2.26.0'
+def aspectJVersion = '1.9.22'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs.add('-parameters')
+}
+
+configurations {
+    agent {
+        canBeResolved = true
+        canBeConsumed = true
+    }
+}
+
+dependencies {
+    implementation group: 'io.rest-assured', name: 'rest-assured', version: '5.4.0'
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.15.3'
+
+    implementation "org.testng:testng:7.9.0"
+
+    agent "org.aspectj:aspectjweaver:$aspectJVersion"
+
+    implementation platform("io.qameta.allure:allure-bom:$allureVersion")
+    implementation "io.qameta.allure:allure-testng"
+
+    implementation "org.slf4j:slf4j-simple:2.0.12"
+}
+
+test {
+    ignoreFailures = true
+    useTestNG()
+    jvmArgs = [ "-javaagent:${configurations.agent.singleFile}" ]
+}
